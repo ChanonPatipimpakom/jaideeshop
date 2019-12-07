@@ -1,6 +1,26 @@
 <?php
     session_start();
     include("connect.php");
+    if(!isset($_GET['pid']) || $_GET['pid']==""){
+        header("Location:index.php");
+    }
+    else{
+        $pid = $_GET['pid'];
+    }
+
+    $sql = "SELECT * FROM product WHERE id=$pid";
+    $result = $conn->query($sql);
+    if(!$result){
+        echo "Error ".$conn->error;
+    }
+    else{
+        if($result->num_rows>0){
+            $prd = $result->fetch_object();
+        }
+        else{
+            $prd = NULL;
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +34,7 @@
     <title>Jaidee Shop</title>
 </head>
 <body>
-<nav class="navbar-default">
+<nav class="navbar-default" style="margin-bottom:30px">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -23,7 +43,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Markus Shop</a>
+            <a class="navbar-brand" href="index.php">Markus Shop</a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
@@ -66,46 +86,49 @@
     </div>
 </nav>
 <div class="container">
-    <div class="jumbotron">
-        <h1>Markus Shop</h1>
-        <p class="leed">Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur reiciendis at facere modi! Sit adipisci id dolore qui voluptatum nulla eius cupiditate ipsum exercitationem! Consequatur at asperiores perferendis temporibus ipsa.</p>
-    </div>
-</div>
-<div class="container">
     <div class="row">
-        <?php
-            $sql = "SELECT * FROM product ORDER BY id";
-            $result = $conn->query($sql);
-            if(!$result){
-                echo "Error During Retrival";
-            }
-            else{
-                //ดึงข้อมูล
-                while($prd=$result->fetch_object()){
-                    $prd->id; //$prd["id]
-            ?>
-            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                <div class="thumbnail">
-                    <a href="productdetail.php?pid=<?php echo $prd->id;?>">
-                        <img src="image/<?php echo $prd->picture;?>" alt="">
-                    </a>
-                    <div class="caption">
-                    <h3><?php echo $prd->name;?></h3>
-                    <p><?php echo $prd->description;?></p>
-                    <p><Strong>Price: </Strong><?php echo $prd->price;?><Strong> Bath</Strong></p>
-                    <p><Strong>Qty: </Strong><?php echo $prd->unitInStock;?></p>
-                    <p>
-                        <a href="#" class="btn btn-info">Add To Basket</a>
-                        <a href="editproduct.php?pid=<?php echo $prd->id?>" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                        <a href="editproduct.php?pid=<?php echo $prd->id?>" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
-                    </p>
-                    </div>
+        <form action="savepro.php" class="form-horizontal" method="post" enctype="multipart/form-data">
+        <img src="image/<?php echo $prd->picture;?>" alt="" class="col-lg-6 col-md-6 col-sm-6 col-xs-6 thumbnail">
+        <div class="col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group">
+                <label for="name" class="control-label col-md-3">Name: </label>
+                <div class="col-md-9">
+                    <input type="text" name="txtName" class="form-control" value="<?php echo $prd->name;?>">
                 </div>
             </div>
-            <?php
-                }
-            }
-        ?>
+            <div class="form-group">
+                <label for="description" class="control-label col-md-3">Description: </label>
+                <div class="col-md-9">
+                    <textarea type="text" name="txtDescrip" class="form-control" ><?php echo $prd->description;?></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="price" class="control-label col-md-3">Price: </label>
+                <div class="col-md-9">
+                    <input type="text" name="txtPrice" class="form-control" value="<?php echo $prd->price;?>">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="stock" class="control-label col-md-3">Stock: </label>
+                <div class="col-md-9">
+                    <input type="text" name="txtStock" class="form-control" value="<?php echo $prd->unitInStock;?>">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="picture" class="control-label col-md-3">Picture: </label>
+                <div class="col-md-9">
+                    <input type="file" name="filePic" class="form-control-file" accept="image/*">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-9 col-md-offset-3">
+                    <input type="hidden" name="hdnProductId" value="<?php echo $prd->id;?>">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="reset" class="btn btn-danger">Reset</button>
+                </div>
+            </div>
+        </div>    
+        </form>
     </div>
 </div>
 </body>
