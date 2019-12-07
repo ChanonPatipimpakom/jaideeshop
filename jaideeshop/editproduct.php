@@ -88,6 +88,7 @@
 <div class="container">
     <div class="row">
         <form action="savepro.php" class="form-horizontal" method="post" enctype="multipart/form-data">
+        <h2>Edit Product</h2>
         <img src="image/<?php echo $prd->picture;?>" alt="" class="col-lg-6 col-md-6 col-sm-6 col-xs-6 thumbnail">
         <div class="col-md-6 col-sm-6 col-xs-6">
             <div class="form-group">
