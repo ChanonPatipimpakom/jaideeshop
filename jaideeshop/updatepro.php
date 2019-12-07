@@ -10,4 +10,11 @@
 
     $sql = "UPDATE product SET name='$name', description='$desc', price=$price, unitInStock=$unitInStock WHERE id = $pid";
     //echo $sql;
+    $result = $conn->query($sql);
+        if(!$result){
+            echo "Error during update product: ".$conn->error;
+        }
+        else{
+            header("Location: index.php");
+        }
 ?>

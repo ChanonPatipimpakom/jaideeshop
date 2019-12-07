@@ -97,7 +97,7 @@
                     <p>
                         <a href="#" class="btn btn-info">Add To Basket</a>
                         <a href="editproduct.php?pid=<?php echo $prd->id?>" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                        <a href="editproduct.php?pid=<?php echo $prd->id?>" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
+                        <a href="deleteproduct.php?pid=<?php echo $prd->id?>" class="btn btn-danger linkDelete"><i class="glyphicon glyphicon-trash"></i></a>
                     </p>
                     </div>
                 </div>
@@ -108,5 +108,18 @@
         ?>
     </div>
 </div>
+<script>
+    $(document).ready(function(){
+        $(".linkDelete").click(function(){
+            if(confirm("confirm delete?")){
+                return true;
+            }else{
+                return false;
+            }
+
+            return confirm("confirm delete")
+        });
+    });
+</script>
 </body>
 </html>
